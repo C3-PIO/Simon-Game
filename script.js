@@ -16,5 +16,5 @@
 // Create array to hold player's sequence/choice  
 // If/else for correct choice - Player's sequence === computer's sequence???
     // How to add new piece to sequence based on IF passed level???
-        // Next round becomes visible if correct choice(s) made 
+        // Next round becomes visible if correct choice(s) made, otherwise, message displayed indicating game lost and resets game. 
 
