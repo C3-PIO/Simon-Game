@@ -1,0 +1,88 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: grid;
+    border: 5px dashed;
+    height: 100vh;
+    grid-template-rows: 75% 25%;
+    background-color: blanchedalmond;
+}
+
+.blocks {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 15px;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    border: 5px dashed black;
+    margin: 20px;
+    padding: 20px;
+}
+
+.green {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    grid-column-start: 2;
+    grid-column-end: 3;
+    border: 3px solid green;
+    grid-row-start: 1;
+    grid-row-end: 3;
+    background-color: green;
+}
+
+.red {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    grid-column-start: 3;
+    grid-column-end: 4;
+    border: 3px solid red;
+    grid-row-start: 1;
+    grid-row-end: 3;
+    background-color: red;
+}
+
+.yellow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    grid-column-start: 2;
+    grid-column-end: 3;
+    border: 3px solid yellow;
+    grid-row-start: 3;
+    grid-row-end: 5;
+    background-color: yellow;
+}
+
+.blue {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    grid-column-start: 3;
+    grid-column-end: 4;
+    border: 3px solid blue;
+    grid-row-start: 3;
+    grid-row-end: 5;
+    background-color: blue;
+}
+
+#block {
+
+}
+
+.buttons {
+    display:flex;
+    border: 3px dashed; 
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 20px;
+    padding: 20px;
+}
+
+/* .next {
+    visibility: hidden;
+} */
