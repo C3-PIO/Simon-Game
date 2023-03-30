@@ -32,30 +32,79 @@
         // How to assign block variable index number to corresponding number in the game sequence array???
         // How to allow player to create their sequence and then compare within the start and next events???
 
+//----------BACK TO THE DRAWING BOARD------------
+// 1. Make all squares individual objects with their respective properties. EG. Color, index, etc
+// 2. Push all objects into an array for easy tracking. (This avoids having to do math stuff)
+// 3. Make a function that randomly selects an object from the array, and queues the next move
+// 4. Use setInterval to call the function multiple times after a delay
+// 5. When the setInterval is finished, release controls to the player with a boolean
+// 6. Lock the controls while the computer is playing with the same boolean
+
 //--------------CODE---------------------
-// Button and color block variables 
+// HTML variables 
 const startBtn = document.querySelector('.start')
 const nextBtn = document.querySelector('.next')
 const resetBtn = document.querySelector('.reset')
-const greenBlock = document.querySelector('.green')
-const redBlock = document.querySelector('.red')
-const yellowBlock = document.querySelector('.yellow')
-const blueBlock = document.querySelector('.blue')
 const h1El = document.querySelector('h1')
 const instEl = document.querySelector('.instructions')
 
-// colorIndex = {
-//     greenBlock: 0,
-//     redBlock: 1,
-//     yellowBlock: 2,
-//     blueBlock: 3
-// }
+//Block objects
+greenBlock = {
+    element: document.querySelector('.green'),
+    index: 0,
+    audio: document.querySelector('#green-audio'),  
+    playAudio(){
+        this.audio.play()
+    },
+    clearShadow(){
+        this.element.style.boxShadow = ''
+    }
+}
+
+redBlock = {
+    element: document.querySelector('.red'),
+    index: 1,
+    audio: document.querySelector('#red-audio'), 
+    playAudio(){
+        this.audio.play()
+    },
+    clearShadow(){
+        this.element.style.boxShadow = ''
+    }
+}
+
+yellowBlock = {
+    element: document.querySelector('.yellow'),
+    index: 2,
+    audio: document.querySelector('#yellow-audio'), 
+    playAudio(){
+        this.audio.play()
+    },
+    clearShadow(){
+        this.element.style.boxShadow = ''
+    }
+}
+
+blueBlock = {
+    element: document.querySelector('.blue'),
+    index: 3,
+    audio: document.querySelector('#blue-audio'), 
+    playAudio(){
+        this.audio.play()
+    },
+    clearShadow(){
+        this.element.style.boxShadow = ''
+    }
+}
+
+// Blocks Array
+blocksArr = [greenBlock, redBlock, yellowBlock, blueBlock]
 
 // Sequence varaiable and function to generate random sequence 
 let gameSequence = []
-function createSequence(){
-    colorIndexNum = Math.floor(Math.random() * 4)
-    gameSequence.push(colorIndexNum)
+function randomBlock(){
+    block = blocksArr[Math.floor(Math.random() * blocksArr.length)].index
+    gameSequence.push(block)
 }
 console.log(`Game Sequence \n ${gameSequence}`)
 
@@ -64,37 +113,62 @@ let playerSequence = []
 console.log(`Player Sequence \n ${playerSequence}`)
 
 // Highlight's block and activates the blocks audio 
-function blockActivation(){
-
+function activateBlock(){
+    for (let i=0; i<gameSequence.length; i++){
+        if (gameSequence[i] === 0){
+            greenBlock.playAudio()
+            greenBlock.element.style.boxShadow = '-20px -20px 15px white'
+            // setTimeout(greenBlock.clearShadow(), 3000)
+        } else if (gameSequence[i] === 1){
+            redBlock.audio.volume = .25
+            redBlock.playAudio()
+            redBlock.element.style.boxShadow = '20px -20px 15px white'
+            // setTimeout(redBlock.clearShadow(), 3000)
+        } else if (gameSequence[i] === 2){
+            yellowBlock.audio.volume = .25
+            yellowBlock.playAudio()
+            yellowBlock.element.style.boxShadow = '-20px 20px 15px white'
+            // setTimeout(yellowBlock.clearShadow(), 3000)
+        } else {
+            blueBlock.audio.volume = .25
+            blueBlock.playAudio()
+            blueBlock.element.style.boxShadow = '20px 20px 15px white'
+            // setTimeout(blueBlock.clearShadow(), 3000)
+        }
+    }
 }
 
 // Click events for each block. Corresponding block's audio plays and block index number is pushed into the playerSequence array
-greenBlock.addEventListener('click', () => {
-    // something that plays green block's audio 
-    playerSequence.push(0)
+greenBlock.element.addEventListener('click', () => {
+    greenBlock.audio.volume = 1.0
+    greenBlock.playAudio()
+    playerSequence.push(greenBlock.index)
     console.log(`Player Sequence \n ${playerSequence}`)
 })
 
-redBlock.addEventListener('click', () => {
-    // something that plays red block's audio  
-    playerSequence.push(1)
+redBlock.element.addEventListener('click', () => {
+    redBlock.audio.volume = .25
+    redBlock.playAudio() 
+    playerSequence.push(redBlock.index)
     console.log(`Player Sequence \n ${playerSequence}`)
 })
 
-yellowBlock.addEventListener('click', () => {
-    // something that plays yellow block's audio  
-    playerSequence.push(2)
+yellowBlock.element.addEventListener('click', () => {
+    yellowBlock.audio.volume = .25
+    yellowBlock.playAudio() 
+    playerSequence.push(yellowBlock.index)
     console.log(`Player Sequence \n ${playerSequence}`)
 })
 
-blueBlock.addEventListener('click', () => {
-    // something that plays blue block's audio // plays audio 
-    playerSequence.push(3)
+blueBlock.element.addEventListener('click', () => {
+    blueBlock.audio.volume = .25
+    blueBlock.playAudio()
+    playerSequence.push(blueBlock.index)
     console.log(`Player Sequence \n ${playerSequence}`)
 })
 
 // Game over/reset stipulation. Unclear atm where to place condition 
-// if (gameSequence.length === 15){
+// if (gameSequence.length > 15){
 //     alert("Congratulations, you've completed all levels! Click 'OK' to further test your skills...") // leave open for further game development to begin a new game with more levels and less time between block activations 
 //     location.reload()
 // }
@@ -102,16 +176,13 @@ blueBlock.addEventListener('click', () => {
 // Click event for next button
 nextBtn.addEventListener('click', () => {
     playerSequence = []
-    createSequence()
+    randomBlock()
     if (gameSequence.length > 15){
         alert("Congratulations, you've completed all levels! Click 'OK' to further test your skills...") // leave open for further game development to begin a new game with more levels and less time between block activations 
         location.reload()
     }
     h1El.textContent = `Level ${gameSequence.length} of 15` 
-    for (i=0; i<gameSequence.length; i++){
-        // something to activate the sequence number's corresponding color so it highlights and the color's audio plays.
-        // something to delay time between block activations 
-    } 
+    setInterval(activateBlock(), 2000)
     console.log(`Game Sequence \n ${gameSequence}`)
     console.log(`Player Sequence \n ${playerSequence}`)
 })
@@ -121,15 +192,15 @@ resetBtn.addEventListener('click', () => {
     location.reload()
 })
 
-//Click event for start button. Creates first piece of sequence array to behin game flow 
+//Click event for start button. Creates first piece of sequence array to begin game flow 
 startBtn.addEventListener('click', () => {
-    createSequence()
-    h1El.textContent = `Level ${gameSequence.length} of 15` 
     startBtn.style.visibility = 'hidden'
     instEl.style.visibility = 'hidden'
-    // something to activate the sequence number's corresponding color so it highlights and the color's audio plays.
-    // something to delay time between block activations 
+    randomBlock()
+    h1El.textContent = `Level ${gameSequence.length} of 15`
     console.log(`Game Sequence \n ${gameSequence}`)
+    gameInterval = setInterval(activateBlock(), 1500)
+    clearInterval(gameInterval)
     // if (playerSequence === gameSequence){
     //     nextBtn.style.visibility = 'visible'
     // } else {
@@ -137,3 +208,4 @@ startBtn.addEventListener('click', () => {
     //     location.reload()
     // }
 })
+
