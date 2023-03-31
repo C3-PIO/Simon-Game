@@ -41,66 +41,77 @@
 // 6. Lock the controls while the computer is playing with the same boolean
 
 //--------------CODE---------------------
-// HTML variables 
-const startBtn = document.querySelector('.start')
-const nextBtn = document.querySelector('.next')
-const resetBtn = document.querySelector('.reset')
+// HTML variable assignments 
+const startBtn = document.querySelector('#start')
+const nextBtn = document.querySelector('#next')
+const resetBtn = document.querySelector('#reset')
 const h1El = document.querySelector('h1')
 const instEl = document.querySelector('.instructions')
+const blockContainer = document.querySelector('#blocks')
+const blocksEl = blockContainer.querySelectorAll('button')
 
 //Block objects
-greenBlock = {
-    element: document.querySelector('.green'),
+const greenBlock = {
+    element: document.getElementById('green'),
     index: 0,
     audio: document.querySelector('#green-audio'),  
     playAudio(){
+        this.audio.playbackRate = 1.3
         this.audio.play()
     },
-    clearShadow(){
+    // Clear block activation effect
+    clearEffect(){
         this.element.style.boxShadow = ''
+        this.element.style.backgroundColor = ''
     }
 }
 
-redBlock = {
-    element: document.querySelector('.red'),
+const redBlock = {
+    element: document.getElementById('red'),
     index: 1,
     audio: document.querySelector('#red-audio'), 
     playAudio(){
+        this.audio.playbackRate = 1.3
         this.audio.play()
     },
-    clearShadow(){
+    clearEffect(){
         this.element.style.boxShadow = ''
+        this.element.style.backgroundColor = ''
     }
 }
 
-yellowBlock = {
-    element: document.querySelector('.yellow'),
+const yellowBlock = {
+    element: document.getElementById('yellow'),
     index: 2,
     audio: document.querySelector('#yellow-audio'), 
     playAudio(){
+        this.audio.playbackRate = 1.3
         this.audio.play()
     },
-    clearShadow(){
+    clearEffect(){
         this.element.style.boxShadow = ''
+        this.element.style.backgroundColor = ''
     }
 }
 
-blueBlock = {
-    element: document.querySelector('.blue'),
+const blueBlock = {
+    element: document.getElementById('blue'),
     index: 3,
     audio: document.querySelector('#blue-audio'), 
     playAudio(){
+        this.audio.playbackRate = 1.3
         this.audio.play()
-    },
-    clearShadow(){
+    }, 
+    clearEffect(){ 
         this.element.style.boxShadow = ''
+        this.element.style.backgroundColor = ''
     }
 }
 
-// Blocks Array
+// Array of block objects 
 blocksArr = [greenBlock, redBlock, yellowBlock, blueBlock]
 
-// Sequence varaiable and function to generate random sequence 
+// Game sequence array and function to generate random block for the sequence  
 let gameSequence = []
 function randomBlock(){
     block = blocksArr[Math.floor(Math.random() * blocksArr.length)].index
@@ -108,64 +119,86 @@ function randomBlock(){
 }
 console.log(`Game Sequence \n ${gameSequence}`)
 
-// Player's sequence. Number's added based on color block selection 
+// Player's sequence. Number's added based on block selection 
 let playerSequence = []
 console.log(`Player Sequence \n ${playerSequence}`)
 
-// Highlight's block and activates the blocks audio 
-function activateBlock(){
-    for (let i=0; i<gameSequence.length; i++){
-        if (gameSequence[i] === 0){
-            greenBlock.playAudio()
-            greenBlock.element.style.boxShadow = '-20px -20px 15px white'
-            // setTimeout(greenBlock.clearShadow(), 3000)
-        } else if (gameSequence[i] === 1){
-            redBlock.audio.volume = .25
-            redBlock.playAudio()
-            redBlock.element.style.boxShadow = '20px -20px 15px white'
-            // setTimeout(redBlock.clearShadow(), 3000)
-        } else if (gameSequence[i] === 2){
-            yellowBlock.audio.volume = .25
-            yellowBlock.playAudio()
-            yellowBlock.element.style.boxShadow = '-20px 20px 15px white'
-            // setTimeout(yellowBlock.clearShadow(), 3000)
-        } else {
-            blueBlock.audio.volume = .25
-            blueBlock.playAudio()
-            blueBlock.element.style.boxShadow = '20px 20px 15px white'
-            // setTimeout(blueBlock.clearShadow(), 3000)
-        }
+// Disable buttons 
+function disableBtn(){
+    for(i=0;i<blocksEl.length;i++){
+        blocksEl[i].disabled = true
     }
 }
 
-// Click events for each block. Corresponding block's audio plays and block index number is pushed into the playerSequence array
-greenBlock.element.addEventListener('click', () => {
-    greenBlock.audio.volume = 1.0
-    greenBlock.playAudio()
-    playerSequence.push(greenBlock.index)
-    console.log(`Player Sequence \n ${playerSequence}`)
-})
+// Enable buttons
+function enableBtn(){
+    for(i=0;i<blocksEl.length;i++){
+        blocksEl[i].disabled = false
+    }
+}
 
-redBlock.element.addEventListener('click', () => {
-    redBlock.audio.volume = .25
-    redBlock.playAudio() 
-    playerSequence.push(redBlock.index)
-    console.log(`Player Sequence \n ${playerSequence}`)
-})
+function checkSequence(){
+    if (playerSequence[playerSequence.length - 1] === gameSequence[playerSequence.length - 1] && playerSequence.length != 0){
+        if (playerSequence.length === gameSequence.length){
+            nextBtn.style.visibility = 'visible'
+        }
+        if (playerSequence.length === gameSequence.length && gameSequence.length === 15){
+            alert("Congratulations, you've completed all levels! Click 'OK' to play again!") 
+            location.reload()
+        }
+    } else {
+        alert("Oops! That wasn't the correct sequence. Click 'OK' to try again.")
+        location.reload()
+    }
+} 
 
-yellowBlock.element.addEventListener('click', () => {
-    yellowBlock.audio.volume = .25
-    yellowBlock.playAudio() 
-    playerSequence.push(yellowBlock.index)
-    console.log(`Player Sequence \n ${playerSequence}`)
-})
-
-blueBlock.element.addEventListener('click', () => {
-    blueBlock.audio.volume = .25
-    blueBlock.playAudio()
-    playerSequence.push(blueBlock.index)
-    console.log(`Player Sequence \n ${playerSequence}`)
-})
+// Loops through game sequence and highlight's block and activates the blocks audio based on objects index number 
+function activateGameSequence(){
+    nextBtn.style.visibility = 'hidden'
+    disableBtn()
+    let delayMultiplier = 600
+    for (let i=0; i<gameSequence.length; i++){
+        switch (gameSequence[i]){
+        case 0:
+            setTimeout(()=>{greenBlock.clearEffect()}, delayMultiplier)
+            setTimeout(()=>{
+                greenBlock.playAudio()
+                greenBlock.element.style.boxShadow = '-20px -20px 15px white'
+                greenBlock.element.style.backgroundColor = 'rgb(0, 180, 0)'
+            }, delayMultiplier - 200)
+            break;
+        case 1:
+            setTimeout(()=>{redBlock.clearEffect()}, delayMultiplier)
+            setTimeout(()=>{
+                redBlock.audio.volume = .25
+                redBlock.playAudio()
+                redBlock.element.style.boxShadow = '20px -20px 15px white'
+                redBlock.element.style.backgroundColor = 'red'
+            }, delayMultiplier - 300)
+            break;
+        case 2:
+            setTimeout(()=>{yellowBlock.clearEffect()}, delayMultiplier)
+            setTimeout(()=>{
+                yellowBlock.audio.volume = .25
+                yellowBlock.playAudio()
+                yellowBlock.element.style.boxShadow = '-20px 20px 15px white'
+                yellowBlock.element.style.backgroundColor = 'yellow'
+            }, delayMultiplier - 300)
+            break;
+        case 3:
+            setTimeout(()=>{blueBlock.clearEffect()}, delayMultiplier)
+            setTimeout(()=>{
+                blueBlock.audio.volume = .25
+                blueBlock.playAudio()
+                blueBlock.element.style.boxShadow = '20px 20px 15px white'
+                blueBlock.element.style.backgroundColor = 'blue'
+            }, delayMultiplier - 300)
+            break;
+        }
+        delayMultiplier += 600
+    }
+    setTimeout(()=>{enableBtn()}, delayMultiplier)
+}
 
 // Game over/reset stipulation. Unclear atm where to place condition 
 // if (gameSequence.length > 15){
@@ -173,16 +206,22 @@ blueBlock.element.addEventListener('click', () => {
 //     location.reload()
 // }
 
+//Click event for start button. Creates first piece of sequence array to begin game flow 
+startBtn.addEventListener('click', () => {
+    startBtn.style.visibility = 'hidden'
+    instEl.style.visibility = 'hidden'
+    randomBlock()
+    activateGameSequence()
+    h1El.textContent = `Level ${gameSequence.length} of 15`
+    console.log(`Game Sequence \n ${gameSequence}`)
+})
+
 // Click event for next button
 nextBtn.addEventListener('click', () => {
     playerSequence = []
     randomBlock()
-    if (gameSequence.length > 15){
-        alert("Congratulations, you've completed all levels! Click 'OK' to further test your skills...") // leave open for further game development to begin a new game with more levels and less time between block activations 
-        location.reload()
-    }
     h1El.textContent = `Level ${gameSequence.length} of 15` 
-    setInterval(activateBlock(), 2000)
+    activateGameSequence()
     console.log(`Game Sequence \n ${gameSequence}`)
     console.log(`Player Sequence \n ${playerSequence}`)
 })
@@ -192,20 +231,35 @@ resetBtn.addEventListener('click', () => {
     location.reload()
 })
 
-//Click event for start button. Creates first piece of sequence array to begin game flow 
-startBtn.addEventListener('click', () => {
-    startBtn.style.visibility = 'hidden'
-    instEl.style.visibility = 'hidden'
-    randomBlock()
-    h1El.textContent = `Level ${gameSequence.length} of 15`
-    console.log(`Game Sequence \n ${gameSequence}`)
-    gameInterval = setInterval(activateBlock(), 1500)
-    clearInterval(gameInterval)
-    // if (playerSequence === gameSequence){
-    //     nextBtn.style.visibility = 'visible'
-    // } else {
-    //     alert("Oops! That wasn't the correct sequence. Click 'OK' to reset the game")
-    //     location.reload()
-    // }
+// Click events for each block. Corresponding block's audio plays and block index number is pushed into the playerSequence array
+greenBlock.element.addEventListener('click', () => {
+    greenBlock.audio.volume = 1.0
+    greenBlock.playAudio()
+    playerSequence.push(greenBlock.index)
+    console.log(`Player Sequence \n ${playerSequence}`)
+    checkSequence()
 })
 
+redBlock.element.addEventListener('click', () => {
+    redBlock.audio.volume = .25
+    redBlock.playAudio() 
+    playerSequence.push(redBlock.index)
+    console.log(`Player Sequence \n ${playerSequence}`)
+    checkSequence()
+})
+
+yellowBlock.element.addEventListener('click', () => {
+    yellowBlock.audio.volume = .25
+    yellowBlock.playAudio() 
+    playerSequence.push(yellowBlock.index)
+    console.log(`Player Sequence \n ${playerSequence}`)
+    checkSequence()
+})
+
+blueBlock.element.addEventListener('click', () => {
+    blueBlock.audio.volume = .25
+    blueBlock.playAudio()
+    playerSequence.push(blueBlock.index)
+    console.log(`Player Sequence \n ${playerSequence}`)
+    checkSequence()
+})
