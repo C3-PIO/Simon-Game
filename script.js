@@ -117,10 +117,10 @@ muteBtn.addEventListener('click', ()=>{
     for (i=0; i<audioEl.length; i++){
         if (counter % 2 != 0){
             audioEl[i].muted = true
-            muteBtn.textContent = 'Sound OFF'
+            muteBtn.textContent = 'Sound ON'
         } else {
             audioEl[i].muted = false 
-            muteBtn.textContent = 'Sound ON'
+            muteBtn.textContent = 'Sound OFF'
         }
     }
 })
