@@ -10,7 +10,7 @@
 
 h1 {
     display: flex;
-    font-family: 'Simon', sans-serif;
+    font-family: 'Simon', Georgia, 'Times New Roman', Times, serif;
     justify-content: center;
     align-items: center;
     color: white;
