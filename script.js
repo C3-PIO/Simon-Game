@@ -156,17 +156,17 @@ function enableBtn(){
 }
 
 // Timer to reset game if player takes more than 5 seconds to begin playing 
-function timer(){
-    secs = 0
-    time = setInterval(()=>{
-        this.secs++
-        if (this.secs>5){
-            clearInterval(time)
-            alert("Simon doesn't have all day...")
-            location.reload()
-        }
-    }, 1000)
-}
+// function timer(){
+//     secs = 0
+//     time = setInterval(()=>{
+//         this.secs++
+//         if (this.secs>5){
+//             clearInterval(time)
+//             alert("Simon doesn't have all day...")
+//             location.reload()
+//         }
+//     }, 1000)
+// }
 
 // This is where the magic happens. The for loop and switch statement loop through and check the game sequence index array to fire the corresponding block's "activation effect", i.e. play the block audio, add the block shadow effect, and highlight the block. 
 function activateGameSequence(){
@@ -214,11 +214,11 @@ function activateGameSequence(){
         delayMultiplier += 600
     }
     setTimeout(()=>{enableBtn()}, delayMultiplier - 500) // returns block access after game sequence is finished playing through 
-    setTimeout(()=>{timer()}, delayMultiplier) // starts 5 second timer 
+    // setTimeout(()=>{timer()}, delayMultiplier) // starts 5 second timer 
 }
 
 function checkSequence(){
-    if ((playerSequence[playerSequence.length - 1] === gameSequence[playerSequence.length - 1]) && playerSequence.length != 0){
+    if (playerSequence[playerSequence.length - 1] === gameSequence[playerSequence.length - 1]){
         if (playerSequence.length === gameSequence.length){
             nextBtn.style.visibility = 'visible'
         }
@@ -238,6 +238,7 @@ startBtn.addEventListener('click', () => {
     instEl.style.visibility = 'hidden'
     randomBlock()
     activateGameSequence()
+    console.log(gameSequence)
     h1El.textContent = `Level ${gameSequence.length} of 20`
 })
 
@@ -247,6 +248,7 @@ nextBtn.addEventListener('click', () => {
     randomBlock()
     h1El.textContent = `Level ${gameSequence.length} of 20` 
     activateGameSequence()
+    console.log(gameSequence)
 })
 
 // Click events for each block. Corresponding block's audio plays and block index number is pushed into the playerSequence array. Block highlight and shadow effect occur through CSS hover & active styling. 
@@ -254,8 +256,9 @@ greenBlock.element.addEventListener('click', () => {
     greenBlock.audio.volume = 1.0
     greenBlock.playAudio()
     playerSequence.push(greenBlock.index)
-    clearInterval(time) // stops timer
+    // clearInterval(time) // stops timer
     // setTimeout(()=>{timer()}, 500) 
+    console.log(playerSequence)
     checkSequence()
 })
 
@@ -263,8 +266,9 @@ redBlock.element.addEventListener('click', () => {
     redBlock.audio.volume = .25
     redBlock.playAudio() 
     playerSequence.push(redBlock.index)
-    clearInterval(time)
+    // clearInterval(time)
     // setTimeout(()=>{timer()}, 500)
+    console.log(playerSequence)
     checkSequence()
 })
 
@@ -272,8 +276,9 @@ yellowBlock.element.addEventListener('click', () => {
     yellowBlock.audio.volume = .25
     yellowBlock.playAudio() 
     playerSequence.push(yellowBlock.index)
-    clearInterval(time)
+    // clearInterval(time)
     // setTimeout(()=>{timer()}, 500)
+    console.log(playerSequence)
     checkSequence()
 })
 
@@ -281,8 +286,9 @@ blueBlock.element.addEventListener('click', () => {
     blueBlock.audio.volume = .25
     blueBlock.playAudio()
     playerSequence.push(blueBlock.index)
-    clearInterval(time)
+    // clearInterval(time)
     // setTimeout(()=>{timer()}, 500)
+    console.log(playerSequence)
     checkSequence()
 })
 
