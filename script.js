@@ -1,46 +1,3 @@
-//--------------STARTING NOTES-----------------
-// Create 4 blocks each of a different color (green, red, yellow, & blue)
-// Audio attached to each block that plays when clicked 
-
-// Create difficulty modes or just one mode??????
-// Create start button 
-
-// Create a next level/round button
-
-// Create a reset button 
-
-// Create array to hold computer sequence
-// Create function to randomly generate the sequence 
-
-// Click event
-// How to display the computer sequence -  Loop through sequence array and highlight color based on each index number?? 
-// Create array to hold player's sequence/choice  
-// If/else for correct choice - Player's sequence === computer's sequence???
-    // How to add new piece to sequence based on IF passed level???
-        // Next round becomes visible if correct choice(s) made, otherwise, message displayed indicating game lost and resets game. 
-
-//------------Game flow steps-------------
-// 1. Player clicks start. Start button will generate the first sequence number: corresponding block will highlight and corresponding block's audio will play . 
-    // green block is 0
-    // red block is 1
-    // yellow block is 2
-    // blue block is 3
-// 2. After a delay (research time delay methods), the player will be given opportunity to select the correct sequence. When a color is selected, corresponding audio sound plays, and the corresponding color's index number is pushed to the player's sequence array. Player's sequence and the games sequence are then compared.
-// 3. If match, next round button displays, and when clicked, new color index number is added to the sequence and corresponding blocks/audio will again highlight/play, at which point step 2 is then repeated until final level reached. Otherwise, wrong selection was made (player's sequence != game sequence) and the game resets
-
-//-------------BIGGEST OBSTACLES-----------
-        // How to assign block variable index number to corresponding number in the game sequence array???
-        // How to allow player to create their sequence and then compare within the start and next events???
-
-//----------BACK TO THE DRAWING BOARD------------
-// 1. Make all squares individual objects with their respective properties. EG. Color, index, etc
-// 2. Push all objects into an array for easy tracking. (This avoids having to do math stuff)
-// 3. Make a function that randomly selects an object from the array, and queues the next move
-// 4. Use setInterval to call the function multiple times after a delay
-// 5. When the setInterval is finished, release controls to the player with a boolean
-// 6. Lock the controls while the computer is playing with the same boolean
-
-//--------------CODE---------------------
 // DOM variable assignments 
 const startBtn = document.querySelector('#start')
 const nextBtn = document.querySelector('#next')
@@ -110,7 +67,7 @@ const blueBlock = {
     }
 }
 
-// Click event for mute button to toggle block audio on/off
+// Click event for mute button to turn block audio on/off based on a click counter. Odd count # = muted. Even count # = unmuted  
 let counter = 0
 muteBtn.addEventListener('click', ()=>{
     counter ++
@@ -172,7 +129,7 @@ function timer(){
 function activateGameSequence(){
     nextBtn.style.visibility = 'hidden' // re-hide next round button
     disableBtn() // Disables blocks so player cannot interrupt the game sequence 
-    let delayMultiplier = 600 // variable used to create delay between each blocks activation 
+    let delayMultiplier = 600 // time variable used to create delay between each blocks activation 
     for (let i=0; i<gameSequence.length; i++){
         switch (gameSequence[i]){ // switch parameter set to each element of the game sequence thanks to the for loop. Each case is based on the blocks index number 
         case 0: // index 0 corresponds with the green block, so the green blocks animation will begin  
@@ -211,18 +168,19 @@ function activateGameSequence(){
             }, delayMultiplier - 300)
             break;
         }
-        delayMultiplier += 600
+        delayMultiplier += 600 // increases delay multiplier each game sequence iteration so that the enable btn and timer function will only activate once the entire game sequence has played through 
     }
-    setTimeout(()=>{enableBtn()}, delayMultiplier - 500) // returns block access after game sequence is finished playing through 
-    setTimeout(()=>{timer()}, delayMultiplier) // starts 5 second timer 
+    setTimeout(()=>{enableBtn()}, delayMultiplier - 600) // returns block access after game sequence is finished playing through. 600 millisecond deduction needed to prevent slight delay between game sequence play through and blocks being accessible  
+    setTimeout(()=>{timer()}, delayMultiplier - 600) // starts 5 second timer. 600 millisecond deduction needed to prevent slight delay between game sequence play through and timer starting. Removal of the slight delay was needed to correct a bug that would occur in the very beginning of the game if the player selected the first block in the sequence too quickly, causing the clearInterval(time) function to fire before the timer was ever called. 
 }
 
+// Checks that the last number of each sequence matches AND that each sequence is the same length. If parameters not met, then wrong sequence selection was made and alert fires to reset game
 function checkSequence(){
     if (playerSequence[playerSequence.length - 1] === gameSequence[playerSequence.length - 1]){
         if (playerSequence.length === gameSequence.length){
             nextBtn.style.visibility = 'visible'
         }
-        if (playerSequence.length === gameSequence.length && gameSequence.length === 15){
+        if (playerSequence.length === gameSequence.length && gameSequence.length === 15){ // Win state based on sequence length of 15
             alert("Congratulations, you've completed all levels! Click 'OK' to play again!") 
             location.reload()
         }
@@ -257,7 +215,7 @@ greenBlock.element.addEventListener('click', () => {
     greenBlock.playAudio()
     playerSequence.push(greenBlock.index)
     clearInterval(time) // stops timer
-    // setTimeout(()=>{timer()}, 500) 
+    // setTimeout(()=>{timer()}, 500) // Originally included to start the timer again between block selections, but desired functionality does not occur. 
     console.log(playerSequence)
     checkSequence()
 })
