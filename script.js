@@ -44,7 +44,7 @@
 // DOM variable assignments 
 const startBtn = document.querySelector('#start')
 const nextBtn = document.querySelector('#next')
-// const resetBtn = document.querySelector('#reset')
+const resetBtn = document.querySelector('#reset')
 const muteBtn = document.querySelector('#mute')
 const h1El = document.querySelector('h1')
 const instEl = document.querySelector('.instructions')
@@ -145,6 +145,7 @@ function disableBtn(){
         blocksEl[i].classList.add('disabled') // adds disabled class to each block to null the CSS hover and active styling (block highlight and shadow can't happen during game sequence no matter what user does with their mouse)
     }
 }
+disableBtn() // Blocks must start disabled so that user cannot begin player sequence until start btn is clicked 
 
 // Enable button function to remove disable button effects 
 function enableBtn(){
@@ -217,7 +218,7 @@ function activateGameSequence(){
 }
 
 function checkSequence(){
-    if (playerSequence[playerSequence.length - 1] === gameSequence[playerSequence.length - 1] && playerSequence.length != 0){
+    if ((playerSequence[playerSequence.length - 1] === gameSequence[playerSequence.length - 1]) && playerSequence.length != 0){
         if (playerSequence.length === gameSequence.length){
             nextBtn.style.visibility = 'visible'
         }
@@ -253,7 +254,8 @@ greenBlock.element.addEventListener('click', () => {
     greenBlock.audio.volume = 1.0
     greenBlock.playAudio()
     playerSequence.push(greenBlock.index)
-    clearInterval(time) // stops timer 
+    clearInterval(time) // stops timer
+    // setTimeout(()=>{timer()}, 500) 
     checkSequence()
 })
 
@@ -262,6 +264,7 @@ redBlock.element.addEventListener('click', () => {
     redBlock.playAudio() 
     playerSequence.push(redBlock.index)
     clearInterval(time)
+    // setTimeout(()=>{timer()}, 500)
     checkSequence()
 })
 
@@ -270,6 +273,7 @@ yellowBlock.element.addEventListener('click', () => {
     yellowBlock.playAudio() 
     playerSequence.push(yellowBlock.index)
     clearInterval(time)
+    // setTimeout(()=>{timer()}, 500)
     checkSequence()
 })
 
@@ -278,10 +282,11 @@ blueBlock.element.addEventListener('click', () => {
     blueBlock.playAudio()
     playerSequence.push(blueBlock.index)
     clearInterval(time)
+    // setTimeout(()=>{timer()}, 500)
     checkSequence()
 })
 
 // Click event for reset button
-// resetBtn.addEventListener('click', () => {
-//     location.reload()
-// })
+resetBtn.addEventListener('click', () => {
+    location.reload()
+})
