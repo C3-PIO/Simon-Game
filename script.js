@@ -221,7 +221,7 @@ function checkSequence(){
         if (playerSequence.length === gameSequence.length){
             nextBtn.style.visibility = 'visible'
         }
-        if (playerSequence.length === gameSequence.length && gameSequence.length === 15){
+        if (playerSequence.length === gameSequence.length && gameSequence.length === 20){
             alert("Congratulations, you've completed all levels! Click 'OK' to play again!") 
             location.reload()
         }
@@ -237,14 +237,14 @@ startBtn.addEventListener('click', () => {
     instEl.style.visibility = 'hidden'
     randomBlock()
     activateGameSequence()
-    h1El.textContent = `Level ${gameSequence.length} of 15`
+    h1El.textContent = `Level ${gameSequence.length} of 20`
 })
 
 // Click event for next button. Clears player sequence from previoius round and adds new block to the game sequence. 
 nextBtn.addEventListener('click', () => {
     playerSequence = []
     randomBlock()
-    h1El.textContent = `Level ${gameSequence.length} of 15` 
+    h1El.textContent = `Level ${gameSequence.length} of 20` 
     activateGameSequence()
 })
 

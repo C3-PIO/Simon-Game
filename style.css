@@ -44,7 +44,7 @@ body {
 .button {
     padding: 1%;
     border-radius: 8px;
-    font-family: 'Simon';
+    font-family: 'Simon', Georgia, 'Times New Roman', Times, serif;
     width: 20%;
 }
 
