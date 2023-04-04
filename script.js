@@ -156,17 +156,17 @@ function enableBtn(){
 }
 
 // Timer to reset game if player takes more than 5 seconds to begin playing 
-// function timer(){
-//     secs = 0
-//     time = setInterval(()=>{
-//         this.secs++
-//         if (this.secs>5){
-//             clearInterval(time)
-//             alert("Simon doesn't have all day...")
-//             location.reload()
-//         }
-//     }, 1000)
-// }
+function timer(){
+    secs = 0
+    time = setInterval(()=>{
+        this.secs++
+        if (this.secs>5){
+            clearInterval(time)
+            alert("Simon doesn't have all day...")
+            location.reload()
+        }
+    }, 1000)
+}
 
 // This is where the magic happens. The for loop and switch statement loop through and check the game sequence index array to fire the corresponding block's "activation effect", i.e. play the block audio, add the block shadow effect, and highlight the block. 
 function activateGameSequence(){
@@ -192,7 +192,7 @@ function activateGameSequence(){
                 redBlock.element.style.backgroundColor = 'red'
             }, delayMultiplier - 300)
             break;
-        case 2: // index 1 corresponds with the yellow block
+        case 2: // index 2 corresponds with the yellow block
             setTimeout(()=>{yellowBlock.clearEffect()}, delayMultiplier)
             setTimeout(()=>{
                 yellowBlock.audio.volume = .25
@@ -201,7 +201,7 @@ function activateGameSequence(){
                 yellowBlock.element.style.backgroundColor = 'yellow'
             }, delayMultiplier - 300)
             break;
-        case 3: // index 1 corresponds with the blue block
+        case 3: // index 3 corresponds with the blue block
             setTimeout(()=>{blueBlock.clearEffect()}, delayMultiplier)
             setTimeout(()=>{
                 blueBlock.audio.volume = .25
@@ -214,7 +214,7 @@ function activateGameSequence(){
         delayMultiplier += 600
     }
     setTimeout(()=>{enableBtn()}, delayMultiplier - 500) // returns block access after game sequence is finished playing through 
-    // setTimeout(()=>{timer()}, delayMultiplier) // starts 5 second timer 
+    setTimeout(()=>{timer()}, delayMultiplier) // starts 5 second timer 
 }
 
 function checkSequence(){
@@ -222,7 +222,7 @@ function checkSequence(){
         if (playerSequence.length === gameSequence.length){
             nextBtn.style.visibility = 'visible'
         }
-        if (playerSequence.length === gameSequence.length && gameSequence.length === 20){
+        if (playerSequence.length === gameSequence.length && gameSequence.length === 15){
             alert("Congratulations, you've completed all levels! Click 'OK' to play again!") 
             location.reload()
         }
@@ -239,14 +239,14 @@ startBtn.addEventListener('click', () => {
     randomBlock()
     activateGameSequence()
     console.log(gameSequence)
-    h1El.textContent = `Level ${gameSequence.length} of 20`
+    h1El.textContent = `Level ${gameSequence.length} of 15`
 })
 
 // Click event for next button. Clears player sequence from previoius round and adds new block to the game sequence. 
 nextBtn.addEventListener('click', () => {
     playerSequence = []
     randomBlock()
-    h1El.textContent = `Level ${gameSequence.length} of 20` 
+    h1El.textContent = `Level ${gameSequence.length} of 15` 
     activateGameSequence()
     console.log(gameSequence)
 })
@@ -256,7 +256,7 @@ greenBlock.element.addEventListener('click', () => {
     greenBlock.audio.volume = 1.0
     greenBlock.playAudio()
     playerSequence.push(greenBlock.index)
-    // clearInterval(time) // stops timer
+    clearInterval(time) // stops timer
     // setTimeout(()=>{timer()}, 500) 
     console.log(playerSequence)
     checkSequence()
@@ -266,7 +266,7 @@ redBlock.element.addEventListener('click', () => {
     redBlock.audio.volume = .25
     redBlock.playAudio() 
     playerSequence.push(redBlock.index)
-    // clearInterval(time)
+    clearInterval(time)
     // setTimeout(()=>{timer()}, 500)
     console.log(playerSequence)
     checkSequence()
@@ -276,7 +276,7 @@ yellowBlock.element.addEventListener('click', () => {
     yellowBlock.audio.volume = .25
     yellowBlock.playAudio() 
     playerSequence.push(yellowBlock.index)
-    // clearInterval(time)
+    clearInterval(time)
     // setTimeout(()=>{timer()}, 500)
     console.log(playerSequence)
     checkSequence()
@@ -286,7 +286,7 @@ blueBlock.element.addEventListener('click', () => {
     blueBlock.audio.volume = .25
     blueBlock.playAudio()
     playerSequence.push(blueBlock.index)
-    // clearInterval(time)
+    clearInterval(time)
     // setTimeout(()=>{timer()}, 500)
     console.log(playerSequence)
     checkSequence()
