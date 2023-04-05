@@ -3,13 +3,13 @@
 This game was created to complete a project during my Per Scholas software engineering bootcamp. The game demonstrates implementation of loops, if/else & switch statements, object oriented programming, as well as DOM manipulation.  
 
 ## How to Play
-------------**Game flow**------------
-1. Player clicks `start game`. Start button will generate the first game sequence number: corresponding block will highlight and corresponding block's audio will play. 
+------------**Game flow and Description**------------
+1. Player selects their desired difficulty then clicks `start game`. Start button will generate the first game sequence number, at which point, the corresponding block will highlight and it's sound will play. 
     - green block corresponds with 0 in the game sequence 
     - red block corresponds with 1
     - yellow block corresponds with 2
     - blue block corresponds with 3
-2. After the game sequence plays, the player will be given an opportunity to select the correct sequence. When a color is selected, it highlights and its audio plays, then the corresponding color's index number is pushed into the player's sequence array. Player's sequence and the game sequence are then compared.
+2. After the game sequence plays, the player will be given an opportunity to select the correct sequence. When a color is selected, it highlights and its sound plays, then the corresponding color's index number is pushed into the player's sequence array. Player's sequence is then compared with the game sequence.
     - If sequences *match*: `next round` button displays, and when clicked, a new color index number is randomly generated and added to the game sequence, at which point step 2 is then repeated until the final level is reached. 
     - If sequences *don't match*: Wrong selection was made by the user (player's sequence != game sequence) and the game resets. 
 
@@ -17,7 +17,7 @@ This game was created to complete a project during my Per Scholas software engin
 HTML, CSS, & Javascript 
 
 ## Building Process 
-My "Starting Notes" and "Biggest Obstacle" sections below were the very first thoughts I jotted down as I was brainstorming how the game would operate. These notes acted as my original HTML, CSS, & JS blueprint. I built upon that starting blueprint up until I hit a wall in my JS code related to the game flow functionality I was hoping to achieve. After discussing my code with an instructor, the "Back to the Drawing Board" notes were steps provided as a means to guide me through creating the game flow functionality I envisioned. After I eventually fixed the functionality, additional features like screen responsiveness, sound control, and text-box pop-ups (opposed to screen alerts) were then added. 
+The "Starting Notes" and "Biggest Obstacle" sections below were my first thoughts as I was brainstorming how the game would look and operate. These notes acted as my original blueprint. I built upon that starting blueprint up until I hit a wall in javascript related to the game flow functionality I was hoping to achieve. After discussing my code with an instructor, the "Back to the Drawing Board" notes were steps provided as a means to guide me through creating the game flow functionality I envisioned. After I eventually fixed the functionality, additional features like screen responsiveness, sound control, text-box pop-ups (opposed to screen alerts), and difficulty selection were then added. 
 
 --------------**STARTING NOTES**--------------
  - Create 4 blocks each of a different color (green, red, yellow, & blue)
@@ -41,7 +41,7 @@ My "Starting Notes" and "Biggest Obstacle" sections below were the very first th
      - Next round becomes visible if correct choice(s) made, otherwise, message displayed indicating game lost and resets game.
 
 ------------**BIGGEST OBSTACLE**------------
- - How to allow user to create their sequence and then compare within the start and next events???
+ - How to allow user to create their sequence and then compare between the start and next events???
 
 ----------**BACK TO THE DRAWING BOARD**----------
 1. Make all squares individual objects with their respective properties. EG. Color, index, etc

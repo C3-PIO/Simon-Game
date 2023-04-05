@@ -11,8 +11,11 @@
 <body>
     <h1>SIMON</h1>
     <container id="blocks">
-        <div class="instructions">Welcome to Simon!<br><br>
-        <p>Simon wants to challenge your memory skills. Think you have what it takes? <br><br> To begin, press the 'Start Game' button. Simon will give the first signal. Repeat the signal by clicking the corresponding block. If correct, you can proceed to the next round.<br><br>With each new round, Simon will duplicate the previous signal(s) and add one. Continue playing as long as you can repeat each sequence of signals correctly. Easy enough right?</p></div>
+        <div class="instructions">Welcome to Simon!<br>
+            <br><p>Simon wants to challenge your memory skills. Think you have what it takes? <br>
+            <br> To begin, press the 'Start Game' button. Simon will give the first signal. Repeat the signal by clicking the corresponding block. If correct, you can proceed to the next round.<br>
+            <br>With each new round, Simon will duplicate the previous signal(s) and add one. Continue playing as long as you can repeat each sequence of signals correctly. Easy enough right?</p>
+        </div>
         <button id="green" class="block"></button>
         <audio id="green-audio" src="https://s3.amazonaws.com/freecodecamp/simonSound4.mp3"></audio>
         <button id="red" class="block"></button>
@@ -21,11 +24,24 @@
         <audio id="yellow-audio" src="https://s3.amazonaws.com/freecodecamp/simonSound2.mp3"></audio>
         <button id="blue" class="block"></button>
         <audio id="blue-audio" src="https://s3.amazonaws.com/freecodecamp/simonSound3.mp3"></audio>
+        <div class="right-side">
         <button id="mute" class="button">Sound OFF</button>
+        <button id="reset" class="button">Reset Game</button>
+        </div>
+        <div id="game-over" class="text-box">
+            <h2>Game Over</h2><br>
+            <br>Oops, that wasn't the correct sequence. Try again!<br>
+            <br><button class="reset">OK</button>
+        </div>
+        <div id="game-won" class="text-box">
+            <h2 class="winner" >Congratulations!!</h2><br>
+            <br>You've completed all levels. Click "OK" to play again!<br>
+            <br><button class="reset1">OK</button>
+        </div>
     </container>
     <container class="buttons">
+        <button id="difficulty" class="button">Select Difficulty</button>
         <button id="start" class="button">Start Game</button>
-        <button id="reset" class="button">Reset Game</button>
         <button id="next" class="button">Next Round</button>
     </container>
 </body>

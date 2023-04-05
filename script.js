@@ -1,13 +1,9 @@
 // DOM variable assignments 
-const startBtn = document.querySelector('#start')
-const nextBtn = document.querySelector('#next')
 const resetBtn = document.querySelector('#reset')
-const muteBtn = document.querySelector('#mute')
+const nextBtn = document.querySelector('#next')
 const h1El = document.querySelector('h1')
-const instEl = document.querySelector('.instructions')
 const blockContainer = document.querySelector('#blocks')
 const blocksEl = blockContainer.querySelectorAll('.block')
-const audioEl = document.querySelectorAll('audio')
 
 // Object for each colored block 
 const greenBlock = {
@@ -67,21 +63,6 @@ const blueBlock = {
     }
 }
 
-// Click event for mute button to turn block audio on/off based on a click counter. Odd count # = muted. Even count # = unmuted  
-let counter = 0
-muteBtn.addEventListener('click', ()=>{
-    counter ++
-    for (i=0; i<audioEl.length; i++){
-        if (counter % 2 != 0){
-            audioEl[i].muted = true
-            muteBtn.textContent = 'Sound ON'
-        } else {
-            audioEl[i].muted = false 
-            muteBtn.textContent = 'Sound OFF'
-        }
-    }
-})
-
 // Array of block objects 
 blocksArr = [greenBlock, redBlock, yellowBlock, blueBlock]
 
@@ -104,7 +85,7 @@ function disableBtn(){
 }
 disableBtn() // Blocks must start disabled so that user cannot begin player sequence until start btn is clicked 
 
-// Enable button function to remove disable button effects 
+// Re-enables blocks and block effects    
 function enableBtn(){
     for(i=0;i<blocksEl.length;i++){
         blocksEl[i].disabled = false
@@ -118,20 +99,37 @@ function timer(){
     time = setInterval(()=>{
         this.secs++
         if (this.secs>5){
-            clearInterval(time)
+            clearInterval(time) // stops timer
             alert("Simon doesn't have all day...")
             location.reload()
         }
     }, 1000)
 }
 
-// This is where the magic happens. The for loop and switch statement loop through and check the game sequence index array to fire the corresponding block's "activation effect", i.e. play the block audio, add the block shadow effect, and highlight the block. 
+// Event for mute button to turn block audio on/off based on a click counter. Odd count # = muted. Even count # = unmuted  
+const muteBtn = document.querySelector('#mute')
+let counter = 0
+muteBtn.addEventListener('click', ()=>{
+    const audioEl = document.querySelectorAll('audio')
+    counter ++
+    for (i=0; i<audioEl.length; i++){
+        if (counter % 2 != 0){
+            audioEl[i].muted = true
+            muteBtn.textContent = 'Sound ON'
+        } else {
+            audioEl[i].muted = false 
+            muteBtn.textContent = 'Sound OFF'
+        }
+    }
+})
+
+// This is where the magic happens. For loop/switch statement loop through and check the game sequence array to fire the corresponding block's "activation effect", i.e. play the block audio, add the block shadow effect, and highlight the block. 
 function activateGameSequence(){
     nextBtn.style.visibility = 'hidden' // re-hide next round button
-    disableBtn() // Disables blocks so player cannot interrupt the game sequence 
+    disableBtn() 
     let delayMultiplier = 600 // time variable used to create delay between each blocks activation 
     for (let i=0; i<gameSequence.length; i++){
-        switch (gameSequence[i]){ // switch parameter set to each element of the game sequence thanks to the for loop. Each case is based on the blocks index number 
+        switch (gameSequence[i]){ // Parameter set to the game sequence loop. Each case is based on the blocks index number 
         case 0: // index 0 corresponds with the green block, so the green blocks animation will begin  
             setTimeout(()=>{greenBlock.clearEffect()}, delayMultiplier) // clears animation effect soon after it fires  
             setTimeout(()=>{
@@ -168,53 +166,100 @@ function activateGameSequence(){
             }, delayMultiplier - 300)
             break;
         }
-        delayMultiplier += 600 // increases delay multiplier each game sequence iteration so that the enable btn and timer function will only activate once the entire game sequence has played through 
+        delayMultiplier += 600 // increases delay multiplier each game sequence iteration so that the enable btn and timer functions won't be called until the entire game sequence has played through 
     }
-    setTimeout(()=>{enableBtn()}, delayMultiplier - 600) // returns block access after game sequence is finished playing through. 600 millisecond deduction needed to prevent slight delay between game sequence play through and blocks being accessible  
-    setTimeout(()=>{timer()}, delayMultiplier - 600) // starts 5 second timer. 600 millisecond deduction needed to prevent slight delay between game sequence play through and timer starting. Removal of the slight delay was needed to correct a bug that would occur in the very beginning of the game if the player selected the first block in the sequence too quickly, causing the clearInterval(time) function to fire before the timer was ever called. 
+    // 600 millisecond deductions needed to prevent slight delays between game sequence end and each function. Removal of the slight delay was needed to correct a bug that would occur in the very beginning of the game if the player selected the first block in the sequence too quickly, causing the clearInterval(time) method to fire before the timer was called. 
+    setTimeout(()=>{enableBtn()}, delayMultiplier - 600)  
+    setTimeout(()=>{timer()}, delayMultiplier - 600) 
 }
 
-// Checks that the last number of each sequence matches AND that each sequence is the same length. If parameters not met, then wrong sequence selection was made and alert fires to reset game
+// Event for difficulty selection. Difficulty based on click count 
+const difficultyBtn = document.querySelector('#difficulty')
+let count = 0
+let difficulty = []
+difficultyBtn.addEventListener('click', ()=>{
+    const easy = 5
+    const medium = 10
+    const hard = 15
+    count ++
+    if (count === 1){
+        difficulty.push(easy)
+        difficultyBtn.textContent = 'Easy'
+        console.log(difficulty)
+    } else if (count === 2){
+        difficulty.pop()
+        difficulty.push(medium)
+        difficultyBtn.textContent = 'Medium'
+        console.log(difficulty)
+    } else if (count === 3){
+        difficulty.pop()
+        difficulty.push(hard)
+        difficultyBtn.textContent = 'Hard'
+        console.log(difficulty)
+    } else {
+        difficulty.pop()
+        count = 0
+        difficultyBtn.textContent = 'Select Difficulty'
+        console.log(difficulty)
+    }
+})
+
+// Checks that the last number of each sequence matches AND that each sequence is the same length. If match, next button becomes available, otherewise, game over text box is shown to rest the game
 function checkSequence(){
     if (playerSequence[playerSequence.length - 1] === gameSequence[playerSequence.length - 1]){
         if (playerSequence.length === gameSequence.length){
             nextBtn.style.visibility = 'visible'
+            disableBtn()
         }
-        if (playerSequence.length === gameSequence.length && gameSequence.length === 15){ // Win state based on sequence length of 15
-            alert("Congratulations, you've completed all levels! Click 'OK' to play again!") 
-            location.reload()
+        if (playerSequence.length === gameSequence.length && gameSequence.length === difficulty[0]){ // Win state based on sequence length of 15
+            document.querySelector('#game-won').style.visibility = 'visible' // Shows hidden game-won div
+            resetBtn.style.visibility = 'hidden'
+            nextBtn.style.visibility = 'hidden'
+            difficultyBtn.style.visibility = 'hidden'
+            h1El.textContent = `YOU WIN!!` 
+            document.querySelector('.reset1').addEventListener('click', ()=>{
+                location.reload()
+            })
         }
     } else {
-        alert("Oops! That wasn't the correct sequence. Click 'OK' to try again.")
-        location.reload()
+        document.querySelector('#game-over').style.visibility = 'visible' // Shows hidden game-over div
+        resetBtn.style.visibility = 'hidden'
+        document.querySelector('.reset').addEventListener('click', ()=>{
+            location.reload()
+        })
     }
 } 
 
-//Click event for start button. Hides start button and instructions and creates first piece of game sequence array to begin game flow 
+// Event for start button. Hides start button and instructions and creates first piece of game sequence array to begin game flow 
+const startBtn = document.querySelector('#start')
 startBtn.addEventListener('click', () => {
     startBtn.style.visibility = 'hidden'
-    instEl.style.visibility = 'hidden'
+    difficultyBtn.style.visibility = 'hidden'
+    if (difficulty[0] === undefined){
+        difficulty[0] = 10
+    }
+    document.querySelector('.instructions').style.visibility = 'hidden'
     randomBlock()
     activateGameSequence()
     console.log(gameSequence)
-    h1El.textContent = `Level ${gameSequence.length} of 15`
+    h1El.textContent = `Level ${gameSequence.length} of ${difficulty[0]}`
 })
 
-// Click event for next button. Clears player sequence from previoius round and adds new block to the game sequence. 
+// Event for next button. Clears player sequence from previoius round and adds new block to the game sequence. 
 nextBtn.addEventListener('click', () => {
     playerSequence = []
     randomBlock()
-    h1El.textContent = `Level ${gameSequence.length} of 15` 
+    h1El.textContent = `Level ${gameSequence.length} of ${difficulty[0]}` 
     activateGameSequence()
     console.log(gameSequence)
 })
 
-// Click events for each block. Corresponding block's audio plays and block index number is pushed into the playerSequence array. Block highlight and shadow effect occur through CSS hover & active styling. 
+// Events for each block. Corresponding block's audio plays and block index number is pushed into the playerSequence array. Block highlight and shadow effect occur through CSS hover & active styling. 
 greenBlock.element.addEventListener('click', () => {
     greenBlock.audio.volume = 1.0
     greenBlock.playAudio()
     playerSequence.push(greenBlock.index)
-    clearInterval(time) // stops timer
+    clearInterval(time)
     // setTimeout(()=>{timer()}, 500) // Originally included to start the timer again between block selections, but desired functionality does not occur. 
     console.log(playerSequence)
     checkSequence()
@@ -250,7 +295,7 @@ blueBlock.element.addEventListener('click', () => {
     checkSequence()
 })
 
-// Click event for reset button
+// Click event for reset button to reset game at any time
 resetBtn.addEventListener('click', () => {
     location.reload()
 })
