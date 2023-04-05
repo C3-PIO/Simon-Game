@@ -1,6 +1,6 @@
 // DOM variable assignments 
 const resetBtn = document.querySelector('#reset')
-const nextBtn = document.querySelector('#next')
+// const nextBtn = document.querySelector('#next')
 const h1El = document.querySelector('h1')
 const blockContainer = document.querySelector('#blocks')
 const blocksEl = blockContainer.querySelectorAll('.block')
@@ -125,7 +125,7 @@ muteBtn.addEventListener('click', ()=>{
 
 // This is where the magic happens. For loop/switch statement loop through and check the game sequence array to fire the corresponding block's "activation effect", i.e. play the block audio, add the block shadow effect, and highlight the block. 
 function activateGameSequence(){
-    nextBtn.style.visibility = 'hidden' // re-hide next round button
+    //nextBtn.style.visibility = 'hidden' // re-hide next round button
     disableBtn() 
     let delayMultiplier = 600 // time variable used to create delay between each blocks activation 
     for (let i=0; i<gameSequence.length; i++){
@@ -204,17 +204,22 @@ difficultyBtn.addEventListener('click', ()=>{
     }
 })
 
-// Checks that the last number of each sequence matches AND that each sequence is the same length. If match, next button becomes available, otherewise, game over text box is shown to rest the game
+// Checks that the last number of each sequence matches AND that each sequence is the same length. If match, new sequence begins with random block added, otherwise, game over text box is shown to reset the game
 function checkSequence(){
     if (playerSequence[playerSequence.length - 1] === gameSequence[playerSequence.length - 1]){
-        if (playerSequence.length === gameSequence.length){
-            nextBtn.style.visibility = 'visible'
-            disableBtn()
+        if (playerSequence.length === gameSequence.length && gameSequence.length < difficulty[0]){
+            // nextBtn.style.visibility = 'visible'
+            // disableBtn()
+            playerSequence = []
+            randomBlock()
+            h1El.textContent = `Level ${gameSequence.length} of ${difficulty[0]}` 
+            setTimeout(()=>{activateGameSequence()}, 400)
+            console.log(gameSequence)
         }
         if (playerSequence.length === gameSequence.length && gameSequence.length === difficulty[0]){ // Win state based on sequence length of 15
             document.querySelector('#game-won').style.visibility = 'visible' // Shows hidden game-won div
             resetBtn.style.visibility = 'hidden'
-            nextBtn.style.visibility = 'hidden'
+            // nextBtn.style.visibility = 'hidden'
             difficultyBtn.style.visibility = 'hidden'
             h1El.textContent = `YOU WIN!!` 
             document.querySelector('.reset1').addEventListener('click', ()=>{
@@ -246,13 +251,13 @@ startBtn.addEventListener('click', () => {
 })
 
 // Event for next button. Clears player sequence from previoius round and adds new block to the game sequence. 
-nextBtn.addEventListener('click', () => {
-    playerSequence = []
-    randomBlock()
-    h1El.textContent = `Level ${gameSequence.length} of ${difficulty[0]}` 
-    activateGameSequence()
-    console.log(gameSequence)
-})
+// nextBtn.addEventListener('click', () => {
+//     playerSequence = []
+//     randomBlock()
+//     h1El.textContent = `Level ${gameSequence.length} of ${difficulty[0]}` 
+//     activateGameSequence()
+//     console.log(gameSequence)
+// })
 
 // Events for each block. Corresponding block's audio plays and block index number is pushed into the playerSequence array. Block highlight and shadow effect occur through CSS hover & active styling. 
 greenBlock.element.addEventListener('click', () => {
