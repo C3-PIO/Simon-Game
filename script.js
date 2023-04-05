@@ -1,6 +1,5 @@
 // DOM variable assignments 
 const resetBtn = document.querySelector('#reset')
-// const nextBtn = document.querySelector('#next')
 const h1El = document.querySelector('h1')
 const blockContainer = document.querySelector('#blocks')
 const blocksEl = blockContainer.querySelectorAll('.block')
@@ -125,7 +124,6 @@ muteBtn.addEventListener('click', ()=>{
 
 // This is where the magic happens. For loop/switch statement loop through and check the game sequence array to fire the corresponding block's "activation effect", i.e. play the block audio, add the block shadow effect, and highlight the block. 
 function activateGameSequence(){
-    //nextBtn.style.visibility = 'hidden' // re-hide next round button
     disableBtn() 
     let delayMultiplier = 600 // time variable used to create delay between each blocks activation 
     for (let i=0; i<gameSequence.length; i++){
@@ -208,8 +206,6 @@ difficultyBtn.addEventListener('click', ()=>{
 function checkSequence(){
     if (playerSequence[playerSequence.length - 1] === gameSequence[playerSequence.length - 1]){
         if (playerSequence.length === gameSequence.length && gameSequence.length < difficulty[0]){
-            // nextBtn.style.visibility = 'visible'
-            // disableBtn()
             playerSequence = []
             randomBlock()
             h1El.textContent = `Level ${gameSequence.length} of ${difficulty[0]}` 
@@ -219,7 +215,6 @@ function checkSequence(){
         if (playerSequence.length === gameSequence.length && gameSequence.length === difficulty[0]){ // Win state based on sequence length of 15
             document.querySelector('#game-won').style.visibility = 'visible' // Shows hidden game-won div
             resetBtn.style.visibility = 'hidden'
-            // nextBtn.style.visibility = 'hidden'
             difficultyBtn.style.visibility = 'hidden'
             h1El.textContent = `YOU WIN!!` 
             document.querySelector('.reset1').addEventListener('click', ()=>{
@@ -265,7 +260,7 @@ greenBlock.element.addEventListener('click', () => {
     greenBlock.playAudio()
     playerSequence.push(greenBlock.index)
     clearInterval(time)
-    // setTimeout(()=>{timer()}, 500) // Originally included to start the timer again between block selections, but desired functionality does not occur. 
+    // setTimeout(()=>{timer()}, 500)   Originally included to start the timer again between block selections, but desired functionality does not occur. 
     console.log(playerSequence)
     checkSequence()
 })
