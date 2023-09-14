@@ -1,4 +1,4 @@
-# Simon-Game
+# [Simon-Game](https://c3-pio.github.io/Simon-Game/)
 ## Summary
 This game was created to complete a project during my Per Scholas software engineering bootcamp. The game demonstrates implementation of loops, if/else & switch statements, object oriented programming, as well as DOM manipulation.  
 
